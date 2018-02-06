@@ -21,7 +21,50 @@ clock=pygame.time.Clock()
 block_size=20
 fps=15
 direction="right"
-font=pygame.font.SysFont(None,25)
+smallfont=pygame.font.SysFont(None,25)
+mediumfont=pygame.font.SysFont("comicsansms",55)
+largefont=pygame.font.SysFont("comicsansms",80)
+def game_intro():
+    intro = True
+    
+    while intro:
+
+        for event in pygame.event.get():
+            if(event.type==pygame.QUIT):
+                pygame.quit()
+                quit()
+            if(event.type==pygame.KEYDOWN):
+                if(event.key==pygame.K_y):
+                    
+                    intro=False
+                if(event.key==pygame.K_n):
+                    pygame.quit()
+                    quit()
+                
+
+
+        
+        gameDisplay.fill(white)
+        message("WELCOME HUMAN",
+                green,
+                -100,"large")
+        message("just eat apples!!!!",
+                black,
+                30,
+                "small")
+        message("and don't run away from the screen",
+                black,
+                50,
+                "small")
+        message("ARE YOU READY (Y/N)",
+                red,
+                90,
+                "medium")
+        pygame.display.update()
+        clock.tick(15)
+    
+    
+
 def snake(block_size,snakelist):
     if(direction=="right"):
         head=pygame.transform.rotate(img,270)
@@ -37,18 +80,23 @@ def snake(block_size,snakelist):
     for XnY in snakelist[:-1]:
         pygame.draw.rect(gameDisplay,green,[XnY[0],XnY[1],block_size,block_size])
         
-def text_objects(text,color):
-    textsurface=font.render(text,True,color)
+def text_objects(text,color,size='small'):
+    if(size=="small"):
+        textsurface=smallfont.render(text,True,color)
+    if(size=="medium"):
+        textsurface=mediumfont.render(text,True,color)
+    if(size=="large"):
+        textsurface=largefont.render(text,True,color)
     return textsurface,textsurface.get_rect()
 
     
 
 
 
-def message(msg,color,y_displace=0):
-   textsurf,textrect=text_objects(msg,color)
-   textrect.center=(0),(0)+y_displace
-   #textrect.center=(display_width/2),(display_height/2)+y_displace
+def message(msg,color,y_displace=0,size="small"):
+   textsurf,textrect=text_objects(msg,color,size)
+   #textrect.center=(0),(0)+y_displace
+   textrect.center=(display_width/2),(display_height/2)+y_displace
    gameDisplay.blit(textsurf,textrect)
        
 
@@ -69,8 +117,8 @@ def gameloop():
     while not gameExit:
         while gameover== True:
             gameDisplay.fill(white)
-            message("GAME OVER",red,+50)
-            message("Press Y to play again and N to quit",black)
+            message("GAME OVER",red,+50,"large")
+            message("Press Y to play again and N to quit",black,-50,'medium')
             pygame.display.update()
             
             for event in pygame.event.get():
@@ -170,4 +218,5 @@ def gameloop():
     time.sleep(2)
     pygame.quit()
     quit()
+game_intro()
 gameloop()
